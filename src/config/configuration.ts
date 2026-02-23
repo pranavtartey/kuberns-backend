@@ -22,8 +22,13 @@ export default () => ({
         amiId: process.env.AWS_AMI_ID,
     },
     redis: {
+        url: process.env.REDIS_URL,
         host: process.env.REDIS_HOST || 'localhost',
         port: parseInt(process.env.REDIS_PORT || '6379', 10),
+        username: process.env.REDIS_USERNAME,
+        password: process.env.REDIS_PASSWORD,
+        db: parseInt(process.env.REDIS_DB || '0', 10),
+        tlsEnabled: process.env.REDIS_TLS === 'true',
     },
     encryptionKey: process.env.ENCRYPTION_KEY,
 });

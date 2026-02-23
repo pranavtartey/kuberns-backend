@@ -30,9 +30,33 @@ import { DatabaseConfig } from './entities/database-config.entity';
     }),
     BullModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        redis: { host: config.get('redis.host'), port: config.get<number>('redis.port') },
-      }),
+      useFactory: (config: ConfigService) => {
+        const redisUrl = config.get<string>('redis.url');
+        if (redisUrl) {
+          return { redis: redisUrl };
+        }
+
+        const redisOptions: {
+          host?: string;
+          port?: number;
+          username?: string;
+          password?: string;
+          db?: number;
+          tls?: Record<string, never>;
+        } = {
+          host: config.get<string>('redis.host'),
+          port: config.get<number>('redis.port'),
+          username: config.get<string>('redis.username'),
+          password: config.get<string>('redis.password'),
+          db: config.get<number>('redis.db'),
+        };
+
+        if (config.get<boolean>('redis.tlsEnabled')) {
+          redisOptions.tls = {};
+        }
+
+        return { redis: redisOptions };
+      },
     }),
     WebAppsModule,
   ],

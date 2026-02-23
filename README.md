@@ -252,8 +252,13 @@ DB_PASSWORD=postgres
 DB_NAME=kuberns
 
 # Redis
+REDIS_URL=
 REDIS_HOST=localhost
 REDIS_PORT=6379
+REDIS_USERNAME=
+REDIS_PASSWORD=
+REDIS_DB=0
+REDIS_TLS=false
 
 # Security / crypto
 # 32-byte key as 64 hex chars
@@ -390,7 +395,9 @@ An import-ready Postman collection is included in this repository:
 - DB connection errors:
   - Check `DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD`, `DB_NAME`.
 - Redis connection errors:
-  - Check `REDIS_HOST`, `REDIS_PORT` and that Redis is running.
+  - If you use Redis auth/managed Redis, set `REDIS_PASSWORD` (and `REDIS_USERNAME` when required).
+  - You can also use a single `REDIS_URL` (for example: `redis://username:password@host:6379/0` or `rediss://...`).
+  - Check `REDIS_HOST`, `REDIS_PORT` and that Redis is running when not using `REDIS_URL`.
 - EC2 provisioning fails in real mode:
   - Ensure `AWS_MOCK_MODE=false`.
   - Verify AWS credentials and IAM permissions.
