@@ -411,3 +411,5 @@ An import-ready Postman collection is included in this repository:
 - Replace dummy user wiring with JWT auth + `CurrentUser` decorator.
 - Persist EC2 IP/endpoint into `instances` for frontend visibility.
 - Add queue retries/backoff and dead-letter handling.
+
+  # AWS EC2 Provisioning only works with us-east-1 region currently
