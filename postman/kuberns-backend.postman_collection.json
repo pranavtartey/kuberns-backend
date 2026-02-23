@@ -1,0 +1,178 @@
+{
+  "info": {
+    "_postman_id": "f04c9690-a3a2-4d12-880f-7c7eb2cbf62f",
+    "name": "Kuberns Backend",
+    "description": "Postman collection for Kuberns backend APIs. Set `baseUrl` if your server runs on a different port.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/",
+        "description": "Simple root endpoint from AppController."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Swagger UI",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/docs",
+        "description": "Swagger UI endpoint exposed by Nest SwaggerModule."
+      },
+      "response": []
+    },
+    {
+      "name": "WebApps",
+      "item": [
+        {
+          "name": "Create WebApp",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"kuberns-from-postman\",\n  \"region\": \"us-east-1\",\n  \"framework\": \"express\",\n  \"plan\": \"pro\",\n  \"orgId\": \"org-1\",\n  \"repoId\": \"repo-1\",\n  \"branch\": \"dev\",\n  \"environments\": [\n    {\n      \"branch\": \"dev\",\n      \"assignRandomPort\": true,\n      \"envVariables\": [\n        {\n          \"key\": \"some_key\",\n          \"value\": \"some_secret_value\"\n        }\n      ],\n      \"instances\": [\n        {}\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/webapps",
+            "description": "Creates a web app and queues deployment simulation."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200 or 201', function () {",
+                  "  pm.expect([200, 201]).to.include(pm.response.code);",
+                  "});",
+                  "let jsonData = null;",
+                  "try {",
+                  "  jsonData = pm.response.json();",
+                  "} catch (e) {",
+                  "  jsonData = null;",
+                  "}",
+                  "if (jsonData && jsonData.id) {",
+                  "  pm.collectionVariables.set('webappId', String(jsonData.id));",
+                  "  pm.test('Saved webappId collection variable', function () {",
+                  "    pm.expect(pm.collectionVariables.get('webappId')).to.eql(String(jsonData.id));",
+                  "  });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "List WebApps",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/webapps",
+            "description": "Returns all webapps for the seeded dummy user."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Get WebApp By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/webapps/{{webappId}}",
+            "description": "Fetches one webapp by ID."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Get Deployment Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/webapps/{{webappId}}/status",
+            "description": "Returns deployment status and recent logs for a webapp."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "webappId",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

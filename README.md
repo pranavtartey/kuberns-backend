@@ -336,6 +336,35 @@ Poll status:
 curl http://localhost:3000/webapps/1/status
 ```
 
+## Postman Collection
+
+An import-ready Postman collection is included in this repository:
+
+- `postman/kuberns-backend.postman_collection.json`
+
+### Import Steps
+
+1. Open Postman.
+2. Click `Import`.
+3. Select `postman/kuberns-backend.postman_collection.json`.
+4. Run requests from the `Kuberns Backend` collection.
+
+### Included Requests
+
+- `GET {{baseUrl}}/` (Health Check)
+- `GET {{baseUrl}}/api/docs` (Swagger UI)
+- `POST {{baseUrl}}/webapps` (Create WebApp)
+- `GET {{baseUrl}}/webapps` (List WebApps)
+- `GET {{baseUrl}}/webapps/{{webappId}}` (Get WebApp by ID)
+- `GET {{baseUrl}}/webapps/{{webappId}}/status` (Deployment Status)
+
+### Collection Variables
+
+- `baseUrl` (default: `http://localhost:3000`)
+- `webappId` (default: `1`)
+
+`Create WebApp` test script automatically stores the created `id` into `webappId`, so the next detail/status requests use the latest created app.
+
 ## Scripts
 
 - `yarn start` - start app
